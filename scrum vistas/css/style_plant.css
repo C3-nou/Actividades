@@ -1,0 +1,42 @@
+
+*{
+    padding: 0px;
+    margin: 0px;
+   
+}
+body{
+     background-color:white;
+   
+}
+.contenedor{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:100%;
+    margin:0 auto;
+   overflow: hidden;
+}body{
+     background-color:white;
+   
+}
+.menu_superior{
+    width: 100%;
+    height: 16vh;
+    background-color:#238276;
+}
+.contenido_interno{
+    display: flex; 
+    width: 75%;
+    background:black;
+}
+.menu_izquierdo{
+    width: 25%;
+    height: 100vh;
+    background-color: #eceff1;
+}
+
+    
+
+
+
+
