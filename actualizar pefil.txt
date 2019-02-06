@@ -1,0 +1,119 @@
+Ingresar a Editar:
+
+<header>
+	<div id="ocultar">
+		 <h3><a href="editar.php">Editar cuenta</a></h3>
+		<form method="POST">
+		<button type="submit" name="cerrarSesion">Cerrar la sesión</button>
+		</form>
+	</div>
+	
+	<div>
+		 <a href="#"><img src="../img/notificaciones2.svg" width = "75px"></a>
+	</div>	
+	<?php
+		require_once '../conexion.php';
+		$conexion = new Conn();
+		$sql= $conexion->query("select * from usuario where idusuario = {$_SESSION['idusuario']}");
+		while($res= $sql->fetch(PDO::FETCH_ASSOC)){
+			echo '<img src="../fotos/'.$res['rutafoto'].'" width = "64px"><br>';
+		 } ?>
+</header>
+
+Editar.php
+
+<?php 
+
+include_once('../controlador/controladorPrincipal.php');
+include_once("../controlador/session.php");
+//session_start();
+    if(!$_SESSION['username']){
+        header('Location:index.php');
+    }
+
+//$_SESSION['password'] = $_POST['contrasena'];
+
+
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Logeado</title>
+</head>
+<header>
+</header>
+<body>
+    <h1>Editar cuenta</h1>
+	<form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value = <?php echo $_SESSION['idusuario'] ?>>
+        <br>
+        <input type="hidden" name="usuario" value = <?php echo $_SESSION['username'] ?>>
+        <br>
+        <label>Contraseña:</label>
+        <input type="text" name="contrasena" value = <?php echo $_SESSION['password'] ?>>
+        <br>
+        <input type="hidden" name="correo" value = <?php echo $_SESSION['correo'] ?>>
+        <br>
+        <label>Foto de perfil:</label>
+        <img src="../fotos/<?php echo $_SESSION['foto']; ?>" width="64px">
+        <br>
+        <input type="file" name="foto" accept="image/*">
+        <br>
+        <input type="submit" name="actualizar" value="Actualizar">
+        <a href="index2.php">Regresar</a>
+    </form>
+</body>
+</html>
+
+ControladorPrincipal.php:
+
+	if(isset($_POST['actualizar'])){
+		
+		$campos->setId($_POST['id']);
+		$campos->setUsuario($_POST['usuario']);
+		$campos->setCorreo($_POST['correo']);
+		$campos->setContrasena($_POST['contrasena']);
+
+		$foto = $_FILES["foto"]["name"];
+
+		$ruta=$_FILES["foto"]["tmp_name"];
+		$destino="../fotos/".$foto;
+		copy($ruta,$destino);
+
+		if($validaciones->Camponull($campos->getContrasena()) || $validaciones->Camponull($foto)){
+			$acciones->UpdatePerfil($campos->getId(),
+									$campos->getUsuario(),
+									$campos->getCorreo(),
+									$campos->getContrasena(),
+									$destino);
+			$sesiones->UpdateSession($campos->getContrasena(), $foto);
+		} 
+	}
+
+sesiones.php
+
+	public function UpdateSession($contrasena, $foto){
+		//session_start();
+		$_SESSION['password'] = $contrasena;
+		$_SESSION['foto'] = $foto;
+
+		echo $_SESSION['password']." ".$_SESSION['foto'];
+	}
+
+acciones.php
+
+	public function UpdatePerfil($id, $usuario, $correo, $password, $foto){
+		$sql = "UPDATE usuario set password = :password, rutafoto = :foto WHERE idusuario = :id AND username = :usuario AND correo = :correo";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(":id", $id);
+		$consulta->bindParam(":usuario", $usuario);
+		$consulta->bindParam(":correo", $correo);
+		$consulta->bindParam(":password", $password);
+		$consulta->bindParam(":foto", $foto);
+
+		$consulta->execute();
+
+	}
