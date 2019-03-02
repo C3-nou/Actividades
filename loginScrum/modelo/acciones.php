@@ -124,6 +124,30 @@ class Acciones{
 		$this->InsertMiembro($consultas, $id);
 	}
 
+	public function InsertTmpProyecto($nombre, $descripcion, $idusuario){
+		$sql = "INSERT INTO proyectotmp (nombre, descripcion, idusuario) VALUES (:nombre, :descripcion, :idusuario)";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':nombre',$nombre);
+		$consulta->bindParam(':descripcion', $descripcion);
+		$consulta->bindParam(':idusuario', $idusuario);
+
+		$consulta->execute();
+	}
+
+	public function selectProyecto($idusuario){
+		$sql="SELECT nombre, descripcion FROM proyectotmp WHERE idusuario = :idusuario";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':idusuario', $idusuario);
+
+		$consulta->execute();
+
+		return $consulta->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	public function InsertMiembro($consultas, $id){
 
 		$dato = $consultas->fetch(PDO::FETCH_ASSOC);
@@ -137,14 +161,25 @@ class Acciones{
 		$consulta->bindParam(':idproyecto', $idproyecto);
 		$consulta->bindParam(':idusuario', $id);
 
-		$this->setIdproyecto($idproyecto);
-		$this->setIdusuario($id);
+		/*$this->setIdproyecto($idproyecto);
+		$this->setIdusuario($id);*/
 
 		$consulta->execute();
 	}
 
-	public function InsertSprint($id, $nombre,$descripcion, $fechaInicio, $fechafinal){
-		$sql = "INSERT INTO sprint (idproyecto , nombre, descripcion, finicio, fechafinal) VALUES (:id, :nombre, :descripcion, :fecha, :fechafinal)";
+	public function InsertSprint($id, $nombre,$descripcion, $fechaInicio, $fechafinal, $duracion){
+		$sql = "SELECT valor FROM conversor WHERE semanas = :semanas";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':semanas', $duracion);
+
+		$consulta->execute();
+
+		$valor = $consulta->fetch(PDO::FETCH_COLUMN);
+
+		
+		$sql = "INSERT INTO sprint (idproyecto , nombre, descripcion, finicio, fechafinal, valor_sprint) VALUES (:id, :nombre, :descripcion, :fecha, :fechafinal, :valor)";
 
 		$consulta = $this->conexion->prepare($sql);
 		
@@ -153,42 +188,67 @@ class Acciones{
 		$consulta->bindParam(':descripcion', $descripcion);
 		$consulta->bindParam(':fecha', $fechaInicio);
 		$consulta->bindParam(':fechafinal', $fechafinal);
+		$consulta->bindParam(':valor', $valor);
 
 		$consulta->execute();
 	
 	}
 
-	public function InsertDatos(){
-		$sql="INSERT INTO datos (idusuario, idproyecto) VALUES (:idusuario, :idproyecto)";
+	public function CicloMiembro($idusuario){
+
+		$estado = 1;
+		$sql = "SELECT idproyecto FROM miembro WHERE idusuario = :usuario AND estado = :estado";
 
 		$consulta = $this->conexion->prepare($sql);
-		
-		$consulta->bindParam(':idusuario', $this->getIdusuario());
-		$consulta->bindParam(':idproyecto', $this->getIdproyecto());
 
-		$consulta->execute();
-	}
-
-	public function CicloProyectos(){
-		$sql = "SELECT idproyecto, nombre, descripcion, fechainicio FROM proyecto WHERE idusuario = :usuario";
-
-		$consulta = $this->conexion->prepare($sql);
-		
-		$consulta->bindParam(':usuario', $_SESSION['idusuario']);
+		$consulta->bindParam(':usuario', $idusuario);
+		$consulta->bindParam(':estado', $estado);
 
 		$consulta->execute();
 
 		$this->count = $consulta->rowCount();
 
-		return $consulta;
+		return $consulta->fetchAll(PDO::FETCH_COLUMN);
+	}
+
+	public function cicloRol($idusuario, $idproyecto){
+		$sql="SELECT idrol FROM miembro WHERE idusuario = :usuario AND idproyecto = :proyecto";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':usuario', $idusuario);
+		$consulta->bindParam(':proyecto', $idproyecto);
+
+		$consulta->execute();
+
+		return $consulta->fetch(PDO::FETCH_COLUMN);
+	}
+
+	public function CicloProyectos($idproyecto){
+
+		$estado = 1;
+
+			$sql = "SELECT idproyecto, nombre, descripcion, fechainicio FROM proyecto WHERE delete is null AND estado = :estado AND idproyecto in ({$idproyecto})";
+
+			$consulta = $this->conexion->prepare($sql);
+
+			$consulta->bindParam(':estado', $estado);
+				
+			$consulta->execute();
+	
+			$this->count = $consulta->rowCount();
+	
+			return $consulta;
 	}
 
 	public function CicloSprint($variable){
-		$sql = "SELECT idsprint, idproyecto, nombre, descripcion, finicio FROM sprint WHERE idproyecto = :id";
+		$estado = 1;
+		$sql = "SELECT idsprint, idproyecto, nombre, descripcion, finicio FROM sprint WHERE delete is null AND estado = :estado AND idproyecto = :id";
 
 		$consulta = $this->conexion->prepare($sql);
 
 		$consulta->bindParam(':id', $variable);
+		$consulta->bindParam(':estado', $estado);
 
 		$consulta->execute();
 
@@ -210,6 +270,225 @@ class Acciones{
 		$this->count = $consulta->rowCount();
 
 		return $consulta;
+	}
+
+	public function datoProyecto($idusuario){
+		$sql = "SELECT idproyecto FROM proyecto WHERE idusuario = :id AND idproyecto = (SELECT MAX(idproyecto) FROM proyecto WHERE idusuario = :id)";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':id', $idusuario);
+
+		$consulta->execute();
+
+		return $consulta->fetch(PDO::FETCH_ASSOC);
+	}
+
+	public function Usuariosm($usuario){
+		$sql = "SELECT idusuario FROM usuario WHERE username = :username";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':username', $usuario);
+
+		$consulta->execute();
+
+		return $consulta->fetch(PDO::FETCH_ASSOC);
+
+	}
+
+	public function Usuariodv($usuario){
+		$sql = "SELECT idusuario FROM usuario WHERE username = :username";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':username', $usuario);
+
+		$consulta->execute();
+
+		return $consulta->fetch(PDO::FETCH_COLUMN);
+
+	}
+	public function InsertSm($id, $proyecto){
+
+		$sql = "INSERT INTO miembro (idproyecto, idusuario, idrol, estado) VALUES (:proyecto, :idusuario, 2, 1)";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':proyecto', $proyecto);
+		$consulta->bindParam(':idusuario', $id);
+
+		$consulta->execute();
+	}
+
+	public function InsertDv($usuario, $proyecto){
+		for ($i=0; $i < count($usuario); $i++) { 
+			$sql = "INSERT INTO miembro (idproyecto, idusuario, idrol, estado) VALUES (:proyecto, :idusuario, 1, 1)";
+
+			$consulta = $this->conexion->prepare($sql);
+
+			$consulta->bindParam(':proyecto', $proyecto);
+			$consulta->bindParam(':idusuario', $usuario[$i]);
+	
+			$consulta->execute();
+		}
+	}
+
+	public function Obtenertmp(){
+		$sql = "SELECT nombre FROM tmp WHERE estado = 1";
+		$consulta = $this->conexion->prepare($sql);
+		$consulta->execute();
+		return $consulta->fetchAll(PDO::FETCH_COLUMN);
+	}
+
+	public function Deletetmp(){
+		$sql = "DELETE FROM tmp";
+		$consulta = $this->conexion->prepare($sql);
+		$consulta->execute();
+	}
+
+	public function DeleteProyectotmp(){
+		$sql = "DELETE FROM proyectotmp";
+		$consulta = $this->conexion->prepare($sql);
+		$consulta->execute();
+	}
+
+	public function EliminarProyecto($idproyecto){
+		$fecha = date('d-m-Y');
+		$sql = "UPDATE proyecto SET delete = :fecha where idproyecto = :idproyecto";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':fecha',$fecha);
+		$consulta->bindParam(':idproyecto',$idproyecto);
+
+		$consulta->execute();
+	}
+
+	public function FinalizarProyecto($idproyecto){
+		$sql = "UPDATE proyecto SET estado = 2 where idproyecto = :idproyecto";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':idproyecto',$idproyecto);
+
+		$consulta->execute();
+	}
+
+	public function AbandonarProyecto($idusuario,$idproyecto){
+		$sql="UPDATE miembro SET estado = 2 WHERE idproyecto = :idproyecto AND idusuario = :idusuario";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':idproyecto',$idproyecto);
+		$consulta->bindParam(':idusuario', $idusuario);
+
+		$consulta->execute();
+	}
+
+	public function DeleteSprint($idsprint){
+		$fecha = date('d-m-Y');
+		$sql = "UPDATE sprint SET delete = :fecha WHERE idsprint = :idsprint";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':fecha',$fecha);
+		$consulta->bindParam(':idsprint',$idsprint);
+
+		$consulta->execute();
+	}
+
+	public function DeleteTarea($idtarea){
+
+		$fecha = date('d-m-Y');
+		$sql = "UPDATE tarea SET delete = :fecha WHERE id = :idtarea";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':fecha',$fecha);
+		$consulta->bindParam(':idtarea',$idtarea);
+
+		$consulta->execute();
+	}
+
+	public function FinalizarSprint($idsprint){
+		$sql = "UPDATE sprint SET estado = 2 WHERE idsprint = :idsprint";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':idsprint',$idsprint);
+
+		$consulta->execute();
+	}
+
+	public function InsertTarea($nombre, $descripcion, $valor, $idsprint){
+		//var_dump($nombre, $descripcion, $valor, $idsprint);
+		$sql = "INSERT INTO tarea (nombre, descripcion, valor,id_sprint, estado) VALUES (:nombre, :descripcion, :valor, :idsprint, 1)";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':nombre', $nombre);
+		$consulta->bindParam(':descripcion', $descripcion);
+		$consulta->bindParam(':valor', $valor);
+		$consulta->bindParam(':idsprint', $idsprint);
+
+		$consulta->execute();
+	}
+
+	public function UpdateSprint($nombre, $descripcion, $idsprint){
+
+		$nombres = $nombre;
+
+		$sql = "UPDATE sprint SET (nombre,descripcion) = (:nombre, :descripcion) WHERE idsprint = :idsprint";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':nombre', $nombres);
+		$consulta->bindParam(':descripcion', $descripcion);
+		$consulta->bindParam(':idsprint', $idsprint);
+
+		$consulta->execute();
+	}
+
+	public function UpdateProyecto($nombre,$descripcion,$idproyecto){
+
+		$nombres = (string) $nombre;
+
+		$sql = "UPDATE proyecto SET (nombre,descripcion) = (:nombre, :descripcion) WHERE idproyecto = :idproyecto";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':nombre', $nombres);
+		$consulta->bindParam(':descripcion', $descripcion);
+		$consulta->bindParam(':idproyecto', $idproyecto);
+
+		$consulta->execute();
+	}
+
+	public function UpdateTarea($nombre, $descripcion, $idtarea){
+		$nombres = (string) $nombre;
+
+		$sql = "UPDATE tarea SET (nombre,descripcion) = (:nombre, :descripcion) WHERE id = :idtarea";
+
+		$consulta = $this->conexion->prepare($sql);
+
+		$consulta->bindParam(':nombre', $nombres);
+		$consulta->bindParam(':descripcion', $descripcion);
+		$consulta->bindParam(':idtarea', $idtarea);
+
+		$consulta->execute();
+	}
+
+	public function UpdateEstadosTarea($estado, $id){
+		$sql =  "UPDATE tarea SET estado = :estado WHERE id = :id ";
+
+		$consulta = $this->conexion->prepare($sql);
+	
+		$consulta->bindParam(':estado',$estado);
+		$consulta->bindParam(':id',$id);
+	
+		
+		$consulta->execute();
 	}
 
 }

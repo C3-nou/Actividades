@@ -25,7 +25,7 @@ if(!$_SESSION['username']){
     <textarea rows="4" cols="50" name="descripcion" placeholder="Añade una descripción a tu proyecto">
     </textarea>
     <br>
-    <input type="submit" value="Cancelar" name="cancelarProyecto">
+    <input type="submit" value="Cancelar" name="cancelar">
     <input type="submit" value="Siguiente" name="crearProyecto">
     </form>
 </body>

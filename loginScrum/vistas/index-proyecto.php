@@ -7,9 +7,6 @@ if(!$_SESSION['username']){
 	header('Location:index.php');
 }
 
-if(isset($_GET) && isset($_GET['idproyecto'])){
-  $idproyecto = $_GET['idproyecto'];
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,9 +28,9 @@ if(isset($_GET) && isset($_GET['idproyecto'])){
 <body>
 	<div>
 		<?php
-			$acciones->CicloSprint($idproyecto); 
+			$acciones->CicloSprint($_SESSION['idproyecto']); 
 			if($acciones->getCount()){
-				echo $ciclos->CicloSprint($acciones->CicloSprint($idproyecto));
+				echo $ciclos->CicloSprint($acciones->CicloSprint($_SESSION['idproyecto']));
 			}else{
 				echo "Este proyecto no cuenta con sprints";
 			}
@@ -44,7 +41,7 @@ if(isset($_GET) && isset($_GET['idproyecto'])){
 		
 		<?php if(isset($_POST['add']) && !isset($_POST['regresar'])): ?>
 		<form method="POST">
-    		<input type="hidden" name="id" value="<?php echo $idproyecto ?>">
+    		<input type="hidden" name="id" value="<?php echo $_SESSION['idproyecto'] ?>">
 
     		<label>Nombre del sprint:</label><br>
     		<input type="text" name="nameSprint">
@@ -69,5 +66,6 @@ if(isset($_GET) && isset($_GET['idproyecto'])){
 		<?php endif ?>
 	</div>
 		<a href="index2.php"><h3>Regresar</h3></a>
+	<script src="../controlador/funciones.js"></script>
 </body>
 </html>

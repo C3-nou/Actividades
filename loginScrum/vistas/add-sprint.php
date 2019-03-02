@@ -19,7 +19,7 @@ if(!$_SESSION['username']){
 
     <form method="POST">
 
-    <input type="hidden" name="id" value="<?php echo $idproyecto ?>">
+    <input type="hidden" name="id" value="<?php echo $_SESSION['idproyecto'] ?>">
 
     <label>Nombre del sprint:</label><br>
     <input type="text" name="nameSprint">
@@ -38,7 +38,7 @@ if(!$_SESSION['username']){
         <option value="28">4 semanas</option>
     </select>
     <br>
-    <input type="submit" value="Regresar" name="cancelarSprint">
+    <input type="submit" value="Cancelar" name="cancelar">
     <input type="submit" value="Siguiente" name="addSprint">
     </form>
 </body>

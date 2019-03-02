@@ -8,20 +8,14 @@ function sm(contador){
 }
 
 function desarrollador(contador){
-    var input = document.getElementById('desarrollador');
+    //var input = document.getElementById('desarrollador');
     var dato = document.getElementById('dv'+contador);
 
+    //alert("HOla");
     
-    if(input.value.length > 0){
-        if(input.value != dato.value){
-            input.value += ','+dato.value;
-            window.location.href = "add-miembros.php?dv="+input.value+"";
-        }else if(input.value.indexOf(dato.value)){
-            alert('No puedes ingresar dos veces al mismo usuario');
-        }
-    }else{
-        input.value = dato.value;
-        window.location.href = "add-miembros.php?dv="+input.value+"";
+    if(dato.value.length > 0){
+        
+        window.location.href = "add-miembros2.php?dv="+dato.value+"";
     }
 
 }

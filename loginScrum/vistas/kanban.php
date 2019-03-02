@@ -4,26 +4,12 @@ include_once('../controlador/controladorPrincipal.php');
 include_once("../controlador/session.php");
 include_once("../conexion.php");
 //session_start();
-$consulta = new Conn();
+$conexion = new Conn();
 if(!$_SESSION['username']){
 	header('Location:index.php');
 }
 $contador = 1;
 
-if(isset($_GET['idsprint'])){
-    $sql = "SELECT idproyecto FROM sprint WHERE idsprint = :idsprint";
-
-$envio = $consulta->prepare($sql);
-
-$envio->bindParam(':idsprint', $idsprint);
-
-$envio->execute();
-
-$pruebas = $envio->fetch(PDO::FETCH_ASSOC);
-
-var_dump($pruebas);
-$var = implode($pruebas);
-}
 
 
 
@@ -41,11 +27,6 @@ display:flex;
   padding: 5rem;
   border-style: solid;
   border-width: 1px;
-  background-color:green;
-}
-
-.div{
-    background-color:white;
 }
 </style>
 <script>
@@ -73,7 +54,7 @@ function drop(ev,id) {
 
 function prueba(contador, dato){
 
-    window.location.href = "enviar_datos.php?id="+contador+"&estado="+dato+"";
+    window.location.href = "../controlador/controladorPrincipal.php?id="+contador+"&estado="+dato+"";
 
 }
 
@@ -81,34 +62,29 @@ function prueba(contador, dato){
 </head>
 <body>
 
-<h2>Drag and Drop</h2>
-<p>Arrastra tu tarea en los distintos estados en el área verde</p>
+<h2>Este es tu kaban</h2>
+
+<a>Gráficas</a>
+<a>Reuniones</a>
 
 <div id="1" class="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <?php  
-            /*$acciones->dragdrop($idsprint, 1);
+        <?php
+            $sql="SELECT * FROM tarea WHERE estado = 1 AND delete is null";
+            $consulta = $conexion->prepare($sql);
+            $consulta->execute();
+            $prueba = $consulta->rowCount();  
 
-            if($acciones->getCount()):*/
-            $sql = "SELECT * FROM tarea WHERE estado = 1 AND id_sprint = :idsprint";
-
-            $datos = $consulta->prepare($sql);
-    
-            //$datos->bindParam(':estado', 1);
-            $datos->bindParam(':idsprint', $idsprint);
-    
-            $datos->execute();
-    
-            $count = $datos->rowCount();
-
-            if($count):
+            if($prueba):
     ?>
         <div>
         <?php
-            while($row = $datos->fetch(PDO::FETCH_ASSOC)) {
-                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."' class='div'>"; 
+            while($row = $consulta->fetch(PDO::FETCH_ASSOC)) {
+                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."'>"; 
                 echo "<input type='hidden' id='dato".$contador."' name='dato' value='".$row['id']."'>";
                 echo '<a>'.$row['nombre'].'</a>'."<br>";
                 echo '<a>'.$row['descripcion'].'</a>'."<br>";
+                echo "<a href=\"update-tarea.php?idtarea=$row[id]\"><h5>Modificar Tarea</h5></a>";
+                echo "<input type='button' name = 'eliminarT' value='Eliminar Tarea' onclick='eliminarT(".$row['id'].")'>";
                 //echo '<a>'.$row['estado'].'</a>'."<br>";
                 echo "-----------------";
                 echo "</div>";
@@ -121,32 +97,26 @@ function prueba(contador, dato){
         <?php echo "No existen datos"; ?>
 
         <?php endif ?>
-
         </div>
 </div>
 
 <div id="2" class="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
         <?php  
-            $sql = "SELECT * FROM tarea WHERE estado = 2 AND id_sprint = :idsprint";
-
-            $datos = $consulta->prepare($sql);
-                
-            //$datos->bindParam(':estado', 1);
-            $datos->bindParam(':idsprint', $idsprint);
-                
-            $datos->execute();
-                
-            $count = $datos->rowCount();
-            
-            if($count):
-        ?>
+            $sql="SELECT * FROM tarea WHERE estado = 2 AND delete is null";
+            $consulta = $conexion->prepare($sql);
+            $consulta->execute();
+            $prueba = $consulta->rowCount(); 
+            if($prueba):
+    ?>
         <div>
-        <?php
-            while($row = $datos->fetch(PDO::FETCH_ASSOC)) {
-                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."' class='div'>"; 
+                <?php
+            while($row = $consulta->fetch(PDO::FETCH_ASSOC)) {
+                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."'>"; 
                 echo "<input type='hidden' id='dato".$contador."' name='dato' value='".$row['id']."'>";
                 echo '<a>'.$row['nombre'].'</a>'."<br>";
                 echo '<a>'.$row['descripcion'].'</a>'."<br>";
+                echo "<a href=\"update-tarea.php?idtarea=$row[id]\"><h5>Modificar Tarea</h5></a>";
+                echo "<input type='button' name = 'eliminarT' value='Eliminar Tarea' onclick='eliminarT(".$row['id'].")'>";
                 //echo '<a>'.$row['estado'].'</a>'."<br>";
                 echo "-----------------";
                 echo "</div>";
@@ -159,32 +129,27 @@ function prueba(contador, dato){
         <?php echo "No existen datos"; ?>
 
         <?php endif ?>
-
         </div>
 </div>
 
 <div id="3" class="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
         <?php  
-            $sql = "SELECT * FROM tarea WHERE estado = 3 AND id_sprint = :idsprint";
+            $sql="SELECT * FROM tarea WHERE estado = 3 AND delete is null";
+            $consulta = $conexion->prepare($sql);
+            $consulta->execute();
+            $prueba = $consulta->rowCount(); 
 
-            $datos = $consulta->prepare($sql);
-                
-            //$datos->bindParam(':estado', 1);
-            $datos->bindParam(':idsprint', $idsprint);
-                
-            $datos->execute();
-                
-            $count = $datos->rowCount();
-            
-            if($count):
+            if($prueba):
     ?>
         <div>
-        <?php
-            while($row = $datos->fetch(PDO::FETCH_ASSOC)) {
-                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."' class='div'>"; 
+                <?php
+            while($row = $consulta->fetch(PDO::FETCH_ASSOC)) {
+                echo "<div draggable='true' ondragstart='drag(event, ".$contador.")' id='drag".$contador."'>"; 
                 echo "<input type='hidden' id='dato".$contador."' name='dato' value='".$row['id']."'>";
                 echo '<a>'.$row['nombre'].'</a>'."<br>";
                 echo '<a>'.$row['descripcion'].'</a>'."<br>";
+                echo "<a href=\"update-tarea.php?idtarea=$row[id]\"><h5>Modificar Tarea</h5></a>";
+                echo "<input type='button' name = 'eliminarT' value='Eliminar Tarea' onclick='eliminarT(".$row['id'].")'>";
                 //echo '<a>'.$row['estado'].'</a>'."<br>";
                 echo "-----------------";
                 echo "</div>";
@@ -197,19 +162,39 @@ function prueba(contador, dato){
         <?php echo "No existen datos"; ?>
 
         <?php endif ?>
-
         </div>
 </div>
 
-<div>
     <form method="POST">
-        <input type="submit" name="addtarea" value="Añadir tarea">
+            <input type="submit" name="addtarea" Value="Añadir Tarea">
     </form>
-</div>
 
-    <?php 
-        echo "<a href='index-proyecto.php?idproyecto=$var'>Regresar</a>";
-    ?>
-    <!--<a href="index-proyecto.php?idsprint = ">Regresar</a>-->
+<?php if(isset($_POST['addtarea'])): ?>
+<form method="POST">
+
+<label>Nombre de la tarea:</label><br>
+<input type="text" name="nameTarea">
+<br>
+
+
+<label>Descripción</label>
+<textarea name="descripcion" rows="4" cols="50" placeholder="Describe la tarea que estas creando">
+</textarea>
+<br>
+
+<label>Valor de la tarea</label>
+<input type="number" name="value"><br>
+
+<input type="submit" value="Cancelar" name="cancelar">
+<input type="submit" value="Siguiente" name="addtareas">
+</form>
+<?php endif ?>
+<br>
+<form method="Post">
+    <input type="submit" name="regresarSprint" value="Regresar">
+</form>
+
+<script src="../controlador/funciones.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 </html>

@@ -35,10 +35,12 @@ if(!$_SESSION['username']){
 	</div>
 	<div>
 		<?php
-		$datos = $acciones->CicloProyectos();
+		$id = $acciones->cicloMiembro($_SESSION['idusuario']);
+		
+		$idproyecto = implode(',',$id);
 		
 		if($acciones->getCount()){
-			echo $ciclos->CicloProyectos($acciones->CicloProyectos());
+			echo $ciclos->CicloProyectos($acciones->CicloProyectos($idproyecto));
 		}else{
 			echo "No Tienes proyectos";
 		}
@@ -60,5 +62,6 @@ if(!$_SESSION['username']){
         </form>
 		<?php endif ?>
 	</div>
+	<script src="../controlador/funciones.js"></script>
 </body>
 </html>

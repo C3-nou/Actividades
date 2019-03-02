@@ -7,52 +7,49 @@ include_once("../controlador/session.php");
 	header('Location:index.php');
 }*/
 
+include_once('../conexion.php');
+$conexion = new Conn();
 
-if(isset($_GET['sm'])){
-    include_once('../conexion.php');
-    $conexion = new Conn();
+//var_dump($_SESSION['yeye']);
 
-    if($_SESSION['username'] == $_GET['sm']){
-        echo 'no puedes añadirte como scrum master siendo product owner';
-        unset($_GET['sm']);
-    }else{
-        $sql = "INSERT INTO tmp (nombre, estado) VALUES (:nombre, 1)";
-        $consulta = $conexion->prepare($sql);
-        $consulta->bindParam(':nombre', $_GET['sm']);
-
-        $_SESSION['sm'] = $_GET['sm'];
-    
-        $consulta->execute();
-    }
-
-
+if(isset($_POST['scrummaster'])){
+    $_SESSION['yeye'] = $_POST['panda'];
 }
 
+if(isset($_POST['developer'])){
+    $developer = $_POST['desarrollador'];
 
-if(isset($_GET['dv'])){
-    include_once('../conexion.php');
-    $conexion = new Conn();
+    for ($i=0; $i < count($_POST['desarrollador']) ; $i++) { 
+        
+        $sql = "SELECT nombre FROM tmp WHERE nombre = :nombre";
+        $consulta = $conexion->prepare($sql);
+        $consulta->bindParam(':nombre', $developer[$i]);
+        $consulta->execute();
+        $count = $consulta->rowCount();
 
-    $sql = "INSERT INTO tmp (nombre, estado) VALUES (:nombre, 2)";
-    $consulta = $conexion->prepare($sql);
-    $consulta->bindParam(':nombre', $_GET['dv']);
-
-    $consulta->execute();
+        if($count){
+            echo "El usuario ya se fue añadido anteriormente";
+            header('Location: add-miembros2.php');
+            return false;
+            
+        }else{
+            $sql = "INSERT INTO tmp (nombre, estado)  VALUES (:nombre, 1)";
+            $consulta = $conexion->prepare($sql);
+            $consulta->bindParam(':nombre', $developer[$i]);
+            $consulta->execute();
+        }
+    }
 }
 
 if(isset($_POST['buscarsm'])){
-    include_once('../conexion.php');
-    $conexion = new Conn();
-    $sm = $_POST['sm'];
 
+    $sm = $_POST['sm'];
     $sql = "SELECT username FROM usuario WHERE username LIKE '$sm%'";
     $consulta = $conexion->prepare($sql);
     $consulta->execute();
 }
 
 if(isset($_POST['buscardv'])){
-    include_once('../conexion.php');
-    $conexion = new Conn();
     $dv = $_POST['dv'];
 
     $sql = "SELECT username FROM usuario WHERE username LIKE '$dv%'";
@@ -70,7 +67,6 @@ $contador = 1;
 </head>
     <?php include("header.php") ?>
 <body>
-
     <form method="POST">
         <label>Buscar Scrum Master:</label>
         <input type="text" name="sm" placeholder="Añade tu Scrum Master">
@@ -78,86 +74,70 @@ $contador = 1;
     </form>
 
     <?php if(isset($_POST['buscarsm']) && !isset($_POST['cerrar'])): ?>
+    <form method="Post">
         <?php while($var = $consulta->fetch(PDO::FETCH_ASSOC)): ?>
-                    <?php $username = $var['username'] ?>
-                    <form method="Post">
-                    <input type='button' id='sm<?php echo $contador ?>' name='usuariosm' onclick="sm(<?php echo $contador ?>)" value="<?php echo $username; ?>">
+                    <?php $username = $var['username'] ?> 
+                    <input type="radio" name='panda' value="<?php echo $username; ?>"/><?php echo $username ?><br>
                     <?php $contador++ ?>
-                    </form>
         <?php endwhile ?>
+        <br>
+        <input type="submit" name="scrummaster" value="Añadir Scrum Master">
+        </form>
     <?php endif ?>
+
+
+    <!-- Este es el buscador del desarrollador-->
 
     <form method="POST">
-        <label>Buscar desarrolladores:</label>
+        <label>Buscar Desarroladores:</label>
         <input type="text" name="dv" placeholder="Añade tu Scrum Master">
-        <input type="submit" id="ScrumMaster" name="buscardv" value="Buscar">
+        <input type="submit"  name="buscardv" value="Buscar">
     </form>
 
-    <?php if(isset($_POST['buscardv'])): ?>
-    <?php while($var = $consulta->fetch(PDO::FETCH_ASSOC)): ?>
-                    <?php $username = $var['username'] ?>
-                    <form method="Post">
-                    <input type='button' id='dv<?php echo $contador ?>' name='usuariodv' onclick="desarrollador(<?php echo $contador ?>)" value="<?php echo $username; ?>">
+    <?php if(isset($_POST['buscardv']) && !isset($_POST['cerrar'])): ?>
+    <form method="Post">
+        <?php while($var = $consulta->fetch(PDO::FETCH_ASSOC)): ?>
+                    <?php $username = $var['username'] ?> 
+                    <input type="checkbox" name='desarrollador[]' value="<?php echo $username; ?>"/><?php echo $username ?><br>
                     <?php $contador++ ?>
-                    </form>
         <?php endwhile ?>
+        <br>
+        <input type="submit" name="developer" value="Añadir Desarrollador">
+        </form>
     <?php endif ?>
 
 
 
-	<h1>Añadir miembros</h1>
+
+    <h1>Mis miembros</h1>
 
     <form method="POST">
     <label>Nombre del Product Owner:</label><br>
     <input type="text" name="productOwner" value="<?php echo $_SESSION['username']?>" disabled>
     <br>
-
-    <label>Scrum Master:</label>
-    <?php 
-            include_once('../conexion.php');
-            $conexion = new Conn();
-        
-            $sql = "SELECT nombre FROM tmp 
-            WHERE estado = 1 AND id = (SELECT MAX(id) FROM tmp WHERE estado = 1)";
-            $consulta = $conexion->prepare($sql);       
-            $consulta->execute();
-            $datos = $consulta->fetch(PDO::FETCH_ASSOC);
-            $contador = $consulta->rowCount();*/
-
-            //var_dump($contador);
-    ?>
-    <?php if($contador && isset($_GET['sm'])): ?>    
-    <input type="text" id="scrumM" name="scrumMaster" placeholder="Nombre Scrum Master" value="<?php echo $_SESSION['sm'] ?>">
+    <label>Scrum Master</label><br/>
+    <?php if(isset($_SESSION['yeye']) && empty($_SESSION['yeye']) == false): ?>
+        <input type="text" name="scrummaster" value="<?php echo $_SESSION['yeye']; ?>">
     <?php else: ?>
-    <input type="text" id="scrumM" name="scrumMaster" placeholder="Nombre Scrum Master" >
+        <input type="text" name="scrummaster">
     <?php endif ?>
     <br>
+    <label>Desarrolladores<label><br>
+    <?php
+        $sql="SELECT nombre FROM tmp WHERE estado = 1";
+        $consulta = $conexion->prepare($sql);
+        $consulta->execute();
 
-    <label>Desarrolladores :</label>
-    <?php 
-            include_once('../conexion.php');
-            $conexion = new Conn();
-        
-            $sql = "SELECT nombre FROM tmp WHERE estado = 2 );";
-            //AND id = (select max(id) from tmp WHERE estado = 2);";
-            $consulta = $conexion->prepare($sql);       
-            $consulta->execute();
-            $datos = $consulta->fetch(PDO::FETCH_ASSOC);
-            $contador = $consulta->rowCount();
-
-            //var_dump($contador);
+        $nombres = $consulta->fetchAll(PDO::FETCH_COLUMN);
+        $nombre = implode(',',$nombres);
     ?>
-    <?php if($contador && isset($_GET['dv'])): ?> 
-            <input type="text" id="desarrollador" name="desarrollador" placeholder="Nombre desarrolladores" value="<?php echo $datos['nombre']; ?>">
-        <?php else: ?>
-            <input type="text" id="desarrollador" name="desarrollador" placeholder="Nombre desarrolladores">
-        <?php endif ?>
-    <br>
-
-    <input type="submit" value="Cancelar" name="cancelar">
-    <input type="button" value="Siguiente" name="siguiente">
-    </form>
+    <input type="text" name="desarrollador" value="<?php print($nombre) ?>">
     
-    <script type="text/javascript" src="text.js"></script>
-</body>
-</html>
+    </form>
+    <br>
+    <input type="submit" name="cancelar" value="Cancelar" ><br>
+    <input type="submit" name="addmiembro" value="Siguiente" >
+    </body>
+    </html>
+
+    

@@ -86,26 +86,75 @@ $ciclos = new Ciclos();
 
 	if(isset($_POST['crearProyecto'])){
 		$nombre = $_POST['nombreProyecto'];
-		$fecha = date('d-m-Y');
+		//$fecha = date('d-m-Y');
 		$descripcion = $_POST['descripcion'];
 
 		if($validaciones->Camponull($nombre)||
-			$validaciones->Camponull($fecha)||
 			$validaciones->Camponull($descripcion)){
-			$acciones->InsertProyecto($_SESSION['idusuario'], $nombre, $descripcion, $fecha, 1);
-			$acciones->InsertDatos();
-			header('Location:add-miembros.php');
+			$acciones->InsertTmpProyecto($nombre, $descripcion, $_SESSION['idusuario']);
+			/*$acciones->InsertProyecto($_SESSION['idusuario'], $nombre, $descripcion, $fecha, 1);
+			$acciones->InsertDatos();*/
+			header('Location:add-miembros2.php');
 		}else{
 			return false;
 		}
 	}
 
-	if(isset($_POST['cancelarProyecto'])){
-		header('Location:index2.php');
+
+
+	//Valido el evento de la vista add-miembros2.php
+	if(isset($_POST['addmiembro'])){
+
+		$proyecto = $acciones->selectProyecto($_SESSION['idusuario']);
+
+		$nombreProyecto = $proyecto[0]['nombre'];
+		$descripcionProyecto = $proyecto[0]['descripcion'];
+		$fecha = date('d-m-Y');
+
+		$acciones->InsertProyecto($_SESSION['idusuario'], $nombreProyecto, $descripcionProyecto,$fecha, 1);
+		//$acciones->InsertDatos();
+		
+		//Consigo el valor del id del proyecto que se esta creando mediante el usuario que esta creando el proyecto.
+		$idproyecto = $acciones->datoProyecto($_SESSION['idusuario']);
+		//Convierto al array idproyecto y guardo su valor en idproyecto2
+		$idproyecto2 = implode($idproyecto);
+
+		$_SESSION['idproyecto'] = $idproyecto2;
+
+		//Obtengo el listado de desarrolladores
+		$datos = $acciones->Obtenertmp();
+
+		//Obtengo el id del scrum master
+		$idsm = $acciones->Usuariosm($_SESSION['yeye']);
+		//Guardo el valor del array idsm en la variabl sm
+		$sm = implode($idsm);
+
+		//creo el array idsv
+		$idsv = array();
+
+		//ciclo para obtener el id de cada desarrollador
+		for ($i=0; $i < count($datos); $i++) {
+			//añado el id al array creado en la línea 124 
+			array_push($idsv, $acciones->Usuariodv($datos[$i]));
+		}
+
+		$acciones->InsertSm($sm, $idproyecto2);
+
+		//Ciclo para añadir a los desarrolladores
+			//envío cada uno de los id de los desarrolladores 
+
+		$acciones->InsertDv($idsv, $idproyecto2);
+
+		$acciones->Deletetmp();
+		$acciones->DeleteProyectotmp();
+
+		header('Location:add-sprint.php');
 	}
 
+
+	//Cóigo para añadir un sprint
 	if(isset($_POST['addSprint'])){
-		$id = $_POST['id'];
+		$id = $_SESSION['idproyecto'];
 		$nombre = $_POST['nameSprint'];
 		$fecha = date('d-m-Y');
 		$descripcion = $_POST['descripcion'];
@@ -116,24 +165,79 @@ $ciclos = new Ciclos();
 			$validaciones->Camponull($nombre)||
 			$validaciones->Camponull($fecha)||
 			$validaciones->Camponull($duracion)){
-			$acciones->InsertSprint($id, $nombre, $descripcion, $fecha, $fechaFin);
-			header("Location:index-proyecto.php?id=$id");
+			$acciones->InsertSprint($id, $nombre, $descripcion, $fecha, $fechaFin, $duracion);
+			//header("Location:index-proyecto.php");
 		}else{
 			return false;
 		}
 	}
 
-	if(isset($_POST['cancelarSprint'])){
-		$id = $_POST['id'];
-		header("Location:index-proyecto.php?id=$id");
+	if(isset($_POST['cancelar'])){
+		header('Location:index2.php');
 	}
 
-	if(isset($_GET) && isset($_GET['id'])){
-		$idproyecto = $_GET['id'];
+	if(isset($_POST['regresarProyecto'])){
+		header('Location: index2.php');
+	}
+
+	if(isset($_POST['regresarSprint'])){
+		header('Location: index-proyecto.php');
+	}
+
+	if(isset($_POST['regresarTarea'])){
+		header('Location: kanban.php');
+	}
+
+	if(isset($_GET) && isset($_GET['idproyecto'])){
+		$_SESSION['idproyecto'] = $_GET['idproyecto'];
 	}
 
 	if(isset($_GET) && isset($_GET['idsprint'])){
-		$idsprint = $_GET['idsprint'];
+		$_SESSION['idsprint'] = $_GET['idsprint'];
+	}
+
+	if(isset($_GET) && isset($_GET['idtarea'])){
+		$_SESSION['idtarea'] = $_GET['idtarea'];
+	}
+
+	if(isset($_GET) && isset($_GET['eliminar'])){
+		$acciones->EliminarProyecto($_GET['eliminar']);
+		header('Location: ../vistas/index2.php');
+	}
+
+	if(isset($_GET) && isset($_GET['finalizar'])){
+		$acciones->FinalizarProyecto($_GET['finalizar']);
+		header('Location: ../vistas/index2.php');
+	}
+
+	if(isset($_GET) && isset($_GET['abandonar'])){
+		$acciones->AbandonarProyecto($_SESSION['idusuario'], $_GET['abandonar']);
+		header('Location: ../vistas/index2.php');
+	}
+
+	if(isset($_GET) && isset($_GET['deleteSprint'])){
+		$acciones->DeleteSprint($_GET['deleteSprint']);
+		header('Location: ../vistas/index-proyecto.php');
+	}
+
+	if(isset($_GET) && isset($_GET['finalizarSprint'])){
+		$acciones->FinalizarSprint($_GET['finalizarSprint']);
+		header('Location: ../vistas/index-proyecto.php');
+	}
+
+	if(isset($_GET) && isset($_GET['deleteTarea'])){
+		$acciones->DeleteTarea($_GET['deleteTarea']);
+		header('Location: ../vistas/kanban.php');
+	}
+
+	if(isset($_POST['addtareas'])){
+		$nombre = $_POST['nameTarea'];
+		$descripcion = $_POST['descripcion'];
+		$valor = $_POST['value'];
+
+		$acciones->InsertTarea($nombre, $descripcion, $valor, $_SESSION['idsprint']);
+
+		header('Location:kanban.php');
 	}
 
 	if(isset($_POST['actualizar'])){
@@ -157,6 +261,40 @@ $ciclos = new Ciclos();
 									$destino);
 			$sesiones->UpdateSession($campos->getContrasena(), $foto);
 		} 
+	}
+
+	if(isset($_POST['updateTarea'])){
+		$nombre = $_POST['nameTarea'];
+		$descripcion = $_POST['descripcion'];
+
+		$acciones->UpdateTarea();
+	}
+
+	if(isset($_POST['updateSprint'])){
+		$nombre = $_POST['nameSprint'];
+		$descripcion = $_POST['descripcion'];
+
+		$acciones->UpdateSprint($nombre, $descripcion, $_SESSION['idsprint']);
+
+		header('Location: index-proyecto.php');
+	}
+
+	if(isset($_GET) && isset($_GET['id']) && isset($_GET['estado'])){
+		$id = $_GET['id'];
+		$estado = $_GET['estado'];
+
+		$acciones->UpdateEstadosTarea($estado, $id);
+
+		header('Location: ../vistas/kanban.php');
+	}
+
+	if(isset($_POST['udpateProyecto'])){
+		$nombre = $_POST['nombreProyecto'];
+		$descripcion = $_POST['descripcion'];
+
+		$acciones->UpdateProyecto($nombre, $descripcion, $_SESSION['idtarea']);
+
+		header('Location: index2.php');
 	}
 
 	if(isset($_POST['cerrarSesion'])){
