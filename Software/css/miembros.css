@@ -1,0 +1,66 @@
+* {
+    font-family: 'fantasy';
+}
+
+.contenedor {
+    margin-top: 1.5rem;
+    width: 80%;
+    height: 0 auto;
+    margin-left: 10%;
+    border-radius: 5px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    border: 1px solid black;
+    margin-bottom: 3rem;
+}
+
+.head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: auto;
+    margin-top: 1rem;
+    background-color: #238276;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    margin-left: 15%;
+    margin-bottom: 1rem;
+}
+
+input {
+    width: 40%;
+    padding: 0.7em;
+    margin-bottom: 0.5rem;
+}
+
+input:focus {
+    outline: 2px solid #9c9c9c;
+}
+
+input[type="submit"], input[type="text"] {
+    margin-left: 30%
+}
+
+label {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-left: 20%;
+}
+
+.bot {
+    cursor: pointer;
+    background: #d5d5d8;
+    color: #000;
+    font-size: 1rem;
+}
+
+.bot:hover {
+    background: #238276;
+}

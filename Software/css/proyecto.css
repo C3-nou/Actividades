@@ -1,0 +1,133 @@
+.div {
+    display: flex;
+    float: left;
+    width: 20%;
+    height: 0 auto;
+    margin: 10px;
+    border-style: solid;
+    border-width: 1px;
+    justify-content: center;
+}
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 0 auto;
+}
+.enci{
+    width: 100%;
+    height: auto;
+}
+.aba{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+}
+.añaspri{
+    width: 20%;
+    height: 2rem;
+    margin-left: 40%;
+    font-size: 1.5rem;
+}
+.añaspri:hover , .regre:hover {
+    background: #238276;
+    border-color:transparent;
+}
+.regre{
+    width: 20%;
+    margin-top: 0.5%;
+    background: #d5d5d8;
+    margin-left: 40%;
+    margin-bottom: 3rem;
+}
+
+/*Notificacion: alerta, sin sprint*/
+h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-left: 25%;
+    background: #a1a1f0;
+    width: 50%;
+    height: 10rem;
+    border-radius: 30px;
+}
+
+/*Estilo pa añadir un sprint*/
+.aba{
+    margin-top: 1.5rem;
+    width: 50%;
+    height: 80%;
+    margin-left: 25%;
+    border-radius: 5px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    border: 1px solid black;
+    margin-bottom: 3rem;
+}
+.head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height:5rem;
+    margin-top: 1rem;
+    background-color: #238276;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    margin-left: 15%;
+    margin-bottom: 1rem;
+    color: white;
+}
+label{
+    font-size: 1.5rem;
+    color: black;
+    margin-left: 20%;
+}
+input[type="text"]{
+    margin-top: 1rem;
+    width: 50%;
+    height: 2.5rem;
+    border-color: transparent;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding-left: 5%;
+    margin-left: 25%;
+    margin-bottom: 1rem;
+}
+input[type="text"]:hover{
+    border: 1px solid black;
+}
+textarea{
+    font-size: 1.2rem;
+    margin-left: 15%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+select{
+    margin-top: 1rem;
+    margin-left: 35%;
+    font-size: 1.5rem;
+}
+input[type="submit"]{
+    width: 30%;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    background: #d5d5d8;
+    color: #000;
+    font-size: 1.3rem;
+    margin-left: 15%;
+}
+input[type="submit"]:hover{
+    background: #238276;
+    border-color: transparent;
+}

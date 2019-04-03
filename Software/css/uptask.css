@@ -1,0 +1,95 @@
+* {
+    font-family: 'fantasy';
+}
+
+.contenedor {
+    margin-top: 1.5rem;
+    width: 50%;
+    height: 80%;
+    margin-left: 25%;
+    border-radius: 5px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    border: 1px solid black;
+    margin-bottom: 3rem;
+}
+.head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height:5rem;
+    margin-top: 1rem;
+    background-color: #238276;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    margin-left: 15%;
+    margin-bottom: 1rem;
+    color: white;
+}
+.info{
+    width: 50%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-left: 25%;
+}
+label{
+    font-size: 1.5rem;
+    color: black;
+}
+input[type="text"] , input[type="number"]{
+    margin-top: 1rem;
+    width: 100%;
+    height: 2.5rem;
+    border-color: transparent;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding-left: 10%;
+    margin-bottom: 1rem;
+}
+input[type="text"]:hover , input[type="number"]:hover{
+    border: 1px solid black;
+}
+textarea{
+    margin-top: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+input[type="submit"]{
+    margin-top: 1.5rem;
+    cursor: pointer;
+    background: #d5d5d8;
+    color: #000;
+    font-size: 1.3rem;
+    margin-left: 35%;
+}
+input[type="submit"]:hover{
+    background: #238276;
+    border-color: transparent;
+}
+
+a{
+    display: flex;
+    float: right;
+    margin-right: 15%;
+    font-size: 1.3rem;
+    text-decoration: none;
+    color:#000;
+    background: #d5d5d8;
+    width: 2rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+a:hover{
+    background: #238276;
+}
