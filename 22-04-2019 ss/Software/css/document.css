@@ -1,0 +1,191 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    outline-color: transparent;
+    font-family: 'fantasy';
+}/*Css del header*/
+.bienv {
+    display: none;
+}
+
+.figcen {
+    display: block;
+    margin-left: 20%;
+}
+figure :hover {
+    background-color: #C1F1BB;
+    border-radius: 3px;
+    height: 100%;
+}
+
+.rig {
+    margin-left: 20%;
+}
+
+/*Diseño del contenido*/
+body{
+    background-color: white;
+}
+.contenedor{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:100%;
+    margin:0 auto;
+    overflow: hidden;
+}
+/*Contenido izquierdo*/
+.left{
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+    height: 82% ;
+    background-color: rgb(218, 216, 216);
+    align-content: center;
+    padding-top: 2rem;
+}
+.icon2{
+    margin-left: 15%;
+}
+.button1 {
+    display: flex;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 18px;
+    margin-left: 20%;
+    margin-bottom: 2rem;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.button1 {
+    background-color: #238276; 
+    color: white; 
+    border: 3px solid #238276;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+.button1:hover {
+    background-color: #D5F9B9;
+    color:black;
+}
+
+/*Contenido derecho plantillas*/
+
+.right{
+    width:85%;
+    background:white;
+    flex-wrap: wrap;
+}
+table{
+    width: 90%;
+    background-color: white;
+    text-align: left;
+    border-collapse: collapse;
+    margin-left: 5%;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+}
+th, td{
+    padding: 5px;
+}
+thead{
+    background-color: #246355;
+    color: white;
+    border-bottom: solid 5px #0F362D;
+    text-align: center;
+    font-size: 1.5rem;
+}
+tr:nth-child(even){
+    background-color: #ddd;
+}
+tr:hover td{
+    background-color: #369681;
+    color: white;
+}
+
+/*Contenido derecho reuniones*/
+h3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-left: 25%;
+    background: #a1a1f0;
+    width: 50%;
+    height: 10rem;
+    border-radius: 30px;
+}
+p{
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 4rem;
+}
+.sub{
+    display: flex;
+    width: 50%;
+    height: 3rem;
+    padding-top: 1rem;
+    margin-left: 25%;
+    justify-content: center;
+    font-size: 1rem;
+}
+#na{
+    height: 2rem;
+    font-size: 1rem;
+    border-color: transparent;
+}
+.envi{
+    width: 30%;
+    height: 2rem;
+    font-size: 1.2rem;
+    margin-left: 35%;
+    margin-top: 0.5rem;
+}
+.envi:hover{
+    background-color: #238276; 
+    border-color: transparent;
+}
+input[type="file"]{
+    font-size: 1rem;
+
+}
+#aña1{
+    font-size: 1rem;
+    margin-left: 15%;
+}
+.añarchi{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    width: 70%;
+    margin-left: 15%;
+    border-radius: 10px;
+    background-color: rgb(218, 216, 216);
+
+}
+#bot , #bot1 {
+    cursor: pointer;
+    font-size: 1rem;
+    width: 10%;
+    height: 1.5rem;
+}
+#bot{
+    margin-left: 39%;
+}
+
+#bot:hover , #bot1:hover {
+    background: #238276;
+    border-color: transparent;
+}
+
+/*tabla de reuniones*/
+.but2{
+    margin-left: 15%;
+    font-size: 1rem;
+}
+.but2:hover{
+    border-color: transparent;
+}

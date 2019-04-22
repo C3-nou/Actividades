@@ -1,0 +1,269 @@
+.error {
+    border: solid 2px #FF0000;
+}
+
+/*estilo de la pagina 
+*/
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+}
+
+.quitar {
+    text-decoration: none;
+    color: white;
+}
+
+.quie {
+    display: none;
+}
+
+p {
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: 1.3rem;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    -ms-text-kashida-space: 1rem;
+}
+
+h2 {
+    text-align: center;
+}
+
+.cont {
+    display: none;
+}
+
+/*estilo de las cajas  
+*/
+
+.Contenedor {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    height: 16vh;
+    width: 100%;
+    margin-top: 0%;
+    background-color: #238276;
+    color: black;
+}
+
+article {
+    width: 60%;
+    background: white;
+    padding: 20px;
+    box-sizing: border-box;
+    float: left;
+}
+
+aside {
+    width: 40%;
+    text-align: center;
+    background: #eceff1;
+    float: left;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/*estilos del contenido de las  cajas  
+*/
+
+header label {
+    display: none;
+    width: 90px;
+    padding: 10px;
+    border-right: 1px solid #fff;
+}
+
+header img {
+    height: 60px;
+    height: 60px;
+}
+
+header label:hover {
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0.3);
+}
+
+.reg input {
+    height: 6%;
+    text-align: center;
+    outline: none;
+}
+
+#caja1, #caja2 {
+    margin: 0%;
+    border-radius: 30px;
+    width: 35%;
+}
+
+#caja3, #caja4, #caja5 {
+    margin-right: 0%;
+    border-radius: 50px;
+    width: 70%;
+    margin: 2%;
+}
+
+#acept {
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.usu input {
+    height: 35%;
+    text-align: center;
+    border-radius: 10px;
+    outline: none;
+}
+
+/*estilo del menu header  
+*/
+
+nav {
+    display: inline-block;
+    width: 50%;
+    text-align: left
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    justify-content: center;
+}
+
+nav li {
+    border-right: 2px solid #fff;
+    font-size: 150%;
+}
+
+nav li:hover {
+    background: rgb(0, 0, 0, 0.3);
+}
+
+nav li a {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    background: #238276;
+    color: white;
+}
+
+nav a:hover {
+    color: black;
+    border-bottom: 3px solid black;
+}
+
+/*estilo del los boton animado
+*/
+
+input[type="submit"] {
+    border: none;
+    background: #0d47a1;
+    color: #f2f2f2;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    position: relative;
+    box-sizing: border-box;
+}
+input[type="submit"]:hover{
+    background-color: black;
+    color: white;
+}
+
+/*imagenes 
+*/
+
+.fot img {
+    position: relative;
+    width: 50%;
+    height: auto;
+    left: 20%;
+}
+
+img {
+    height: 6.5rem;
+    border-radius: 7%;
+    position: relative;
+}
+
+/*texto registro 
+*/
+
+h1 {
+    text-align: center;
+    font-size: 300%;
+    margin: 4%;
+}
+
+/*modal
+*/
+
+.modalDialog {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+    overflow-x: scroll;
+}
+
+.modalDialog:target {
+    opacity: 1;
+    pointer-events: auto;
+    overflow-x: scroll;
+}
+
+.modalDialog>div {
+    width: 50%;
+    position: relative;
+    margin: 10% auto;
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px;
+}
+
+.close {
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover {
+    background: #00d9ff;
+}

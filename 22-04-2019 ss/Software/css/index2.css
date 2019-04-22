@@ -1,0 +1,123 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;    
+    outline-color: transparent;
+    font-family: 'fantasy';
+}
+.div {
+    display: flex;
+    float: left;
+    width: 30%;
+    height: auto;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: #eceff1;
+} 
+
+.head2{
+    display: flex;
+    align-items: center;
+    height: 18vh;
+    width: 100%;
+    background-color: #238276;
+    color: black;
+    border-bottom:3px solid black
+} 
+.logo{
+    margin-left: 1%;
+}
+.bienv{
+    width: 40%;
+    height: 100%;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.rig{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    float: right;
+    margin-left: 35%;
+}
+ .foot{
+    padding: 2;
+    background:  #000;
+    color: white;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2rem;
+
+}
+ .foot:hover{
+    background: #C1F1BB;
+    color: #000;
+    cursor: pointer;
+    text-decoration: none;
+}
+.fotuser {
+    margin-right: 1.5rem;
+}
+
+/*DROPTOWN*/
+.dropdown {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .dd-button {
+    cursor: pointer;
+    margin-left: 1.5rem;
+    width: 3rem;
+  }
+  .dd-input {
+    display: none;
+  }
+  
+  .dd-menu {
+    position: absolute;
+    top: 100%;
+  }
+  
+  .dd-input + .dd-menu {
+    display: none;
+  } 
+  
+  .dd-input:checked + .dd-menu {
+    display: block;
+  } 
+  
+  
+/*Figura centro:Dash,Plani,Document*/
+.figcen{
+  display: none;
+}
+.figura_center{
+  width: 25rem;
+  height: 100%;
+  display: flex;
+  flex-direction: left;
+  margin-left: 20%;
+  justify-content: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.grafica, .planificacion , .documentacion , .carpe{
+  display: flex;
+  flex-direction: column;
+  padding-top: 4px;
+  margin-right:35%;
+  margin-top: 1.3rem;
+  width: 10rem;
+  height: 70%;
+  align-items: center;
+}
+
+a{
+  font-size: 1.25rem;
+  color:black;
+}
